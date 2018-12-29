@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import shutil
 import os
 import requests
+import time
 
 from multiprocessing.dummy import Pool as ThreadPool
 
@@ -18,8 +19,12 @@ if not os.path.exists(desktop):
 
 def get_html(code):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-    response = requests.get('https://prnt.sc/' + code, headers=headers, timeout=5)
-    return response.text
+    try:
+        response = requests.get('https://prnt.sc/' + code, headers=headers, timeout=5)
+        return response.text
+    except:
+        time.sleep(10)
+        print("ReadTimeout - Sleep for 10 sec")
 
 
 def RandomNumber(col, size=6, chars=string.ascii_lowercase + string.digits):
@@ -62,7 +67,7 @@ def main(col):
                 else:
                     print("[+] Valid: " + str(code))
         except TypeError:
-            print("ERROR - TypeError -" + str(code))
+            print("ERROR - TypeError - " + str(code))
 
 
 if __name__ == '__main__':
